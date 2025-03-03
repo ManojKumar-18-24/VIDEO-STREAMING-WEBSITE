@@ -2,11 +2,13 @@
 
 import dotenv from "dotenv"
 import connectDB from "./db/index.js";
-
+import express from "express"
+import  {app} from  "./app.js"
+/*
 //1st Approach
 // import express from "express";
 
-// const app = express()
+const app = express()
 
 // ; ( async () => {
 //     try {
@@ -31,7 +33,7 @@ import connectDB from "./db/index.js";
 //     }
 // } )()
 
-
+*/
 dotenv.config({
     path: './env'
 })
@@ -44,7 +46,7 @@ connectDB()
         throw error
     })
 
-    application.listen(process.env.PORT || 8000 , () => {
+    app.listen(process.env.PORT || 8000 , () => {
         console.log(`Server is running at port : ${process.env.PORT}`)
     })
 })
