@@ -4,12 +4,14 @@ import {User} from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 
-const generateAccessAndRefreshTokens = async (userId) => {
+const generateAccessAndRefreshTokens = async ({userId}) => {
       try {
         const user = await User.findById(userId)
+        console.log('user: ',user)
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefreshToken()
 
+        console.log(accessToken,refreshToken)
         user.refreshToken = refreshToken
         await user.save({validateBeforeSave: false})
 
@@ -100,6 +102,7 @@ const loginUser = asyncHandler(async (req,res) => {
 
     const {email , password , username} = req.body ;
 
+    console.log('email: ' ,email)
     if(!username && !email) {
         throw new ApiError(400,"username or password required")
     }
@@ -118,9 +121,9 @@ const loginUser = asyncHandler(async (req,res) => {
         throw new ApiError(401,"Invalid user credentials")
     }
 
-    const {accessToken,refreshToken} = await generateAccessAndRefreshTokens(user._id)
+    const {accessToken,refreshToken} = await generateAccessAndRefreshTokens({userId:user._id})
 
-    const loggedInuser = await User.findById(userId).select(
+    const loggedInuser = await User.findById(user._id).select(
         "-password -refreshToken"
     )
 
