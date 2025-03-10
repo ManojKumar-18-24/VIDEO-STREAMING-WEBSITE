@@ -7,11 +7,11 @@ import {ApiResponse} from "../utils/ApiResponse.js"
 const generateAccessAndRefreshTokens = async ({userId}) => {
       try {
         const user = await User.findById(userId)
-        console.log('user: ',user)
+       // console.log('user: ',user)
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefreshToken()
 
-        console.log(accessToken,refreshToken)
+        //console.log(accessToken,refreshToken)
         user.refreshToken = refreshToken
         await user.save({validateBeforeSave: false})
 
@@ -102,7 +102,7 @@ const loginUser = asyncHandler(async (req,res) => {
 
     const {email , password , username} = req.body ;
 
-    console.log('email: ' ,email)
+    //console.log('email: ' ,email)
     if(!username && !email) {
         throw new ApiError(400,"username or password required")
     }
@@ -149,6 +149,7 @@ const loginUser = asyncHandler(async (req,res) => {
 })
 
 const logoutUser = asyncHandler(async(req,res) => {
+    //console.log('id: ' , req.user._id)
     await User.findByIdAndUpdate(
         req.user._id,
         {
